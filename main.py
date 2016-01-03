@@ -10,7 +10,7 @@ class Dashcam:
 
     def __init__(self):
         logging.basicConfig(
-           level=logging.DEBUG,
+           level=logging.INFO,
            filename=Dashcam.LOG_FILE, 
            format="%(asctime)-15s %(name)-12s %(levelname)s %(message)s",
            datefmt='%y-%m-%d %H:%M:%S',
@@ -29,9 +29,9 @@ class Dashcam:
                 )
                 while self.check_disk_usage() < Dashcam.MINIMUM_FREE_SPACE:
                     self.remove_oldest_file()
-            # record for 5 seconds
+            # record for 30 minutes (on low resolution)
             timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
-            self.recorder.record(timestamp, duration=30)
+            self.recorder.record(timestamp, duration=30*60)
 
     def remove_oldest_file(self, extension=".h264"):
         try:

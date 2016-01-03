@@ -8,14 +8,17 @@ class Recorder:
     def __init__(self):
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    def record(self, filename, duration=5):
+    def record(self, filename, duration=5, low_resolution=False):
         recording_path = Recorder.RECORDING_DIR + filename + ".h264"
         self.logger.info(
                 "Recording {t}s into {path} (0s => inf)"
                 .format(t=duration, path=recording_path)
         )
         with picamera.PiCamera() as camera:
-            camera.resolution = (1296, 976)
+            if low_resolution:
+                camera.resolution = (640, 480)
+            else:
+                camera.resolution = (1296, 976)
             camera.framerate = 24
             # no need for preview unless a monitor is connected
             # camera.start_preview()
