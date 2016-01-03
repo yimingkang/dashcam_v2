@@ -3,26 +3,27 @@ import logging
 import picamera
 
 class Recorder:
+    RECORDING_DIR = "./recordings/"
+
     def __init__(self):
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    def test_log(self):
-        self.logger.debug("debug")
-        self.logger.info("info")
-        self.logger.warning("warning")
-        self.logger.error("error")
-
-    def record(self, duration=5):
+    def record(self, filename, duration=5):
+        recording_path = Recorder.RECORDING_DIR + filename + ".h264"
+        self.logger.info(
+                "Recording {t}s into {path} (0s => inf)"
+                .format(t=duration, path=recording_path)
+        )
         with picamera.PiCamera() as camera:
-            camera.resolution = (1280, 720)
+            camera.resolution = (1296, 976)
             camera.framerate = 24
             # no need for preview unless a monitor is connected
             # camera.start_preview()
             camera.annotate_background = picamera.Color('black')
             camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            camera.start_recording('test_recording.h264')
+            camera.start_recording(recording_path)
             start = dt.datetime.now()
-            while (dt.datetime.now() - start).seconds < duration:
+            while duration == 0 or (dt.datetime.now() - start).seconds < duration:
                 camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                camera.wait_recording(0.2)
+                camera.wait_recording(0.1)
             camera.stop_recording()
