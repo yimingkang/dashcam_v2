@@ -21,13 +21,13 @@ class Dashcam:
     def start(self):
         self.logger.info("Starting recorder")
         while True:
-            free_MB = self.check_disk_usage()
+            free_MB = self.get_free_MB()
             if free_MB < Dashcam.MINIMUM_FREE_SPACE:
                 self.logger.error(
                     "Not enough free space! requried: {r}, have: {h}"
                     .format(r=Dashcam.MINIMUM_FREE_SPACE, h=free_MB)
                 )
-                while self.check_disk_usage() < Dashcam.MINIMUM_FREE_SPACE:
+                while self.get_free_MB() < Dashcam.MINIMUM_FREE_SPACE:
                     self.remove_oldest_file()
             # record for 30 minutes (on low resolution)
             timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
@@ -52,7 +52,7 @@ class Dashcam:
         self.logger.warning("Removing {f}".format(f=oldest))
         os.remove(oldest)
 
-    def check_disk_usage(self, path="/"):
+    def get_free_MB(self, path="/"):
         """Return disk usage statistics about the given path.
         """
         st = os.statvfs(path)
