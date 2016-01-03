@@ -5,7 +5,7 @@ import os
 from recorder import Recorder
 
 class Dashcam:
-    LOG_FILE = "./dashcam.log"
+    LOG_FILE = "/home/pi/dashcam_v2/dashcam.log"
     MINIMUM_FREE_SPACE = 500  # 500 MB
 
     def __init__(self):
@@ -31,8 +31,8 @@ class Dashcam:
                     self.remove_oldest_file()
             # record for 30 minutes (on low resolution)
             timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
-            self.recorder.record(timestamp, duration=30*60)
-
+            self.recorder.record(timestamp, duration=1800, low_resolution=True)
+    
     def remove_oldest_file(self, extension=".h264"):
         try:
             oldest = min(

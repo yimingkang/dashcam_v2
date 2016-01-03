@@ -3,7 +3,7 @@ import logging
 import picamera
 
 class Recorder:
-    RECORDING_DIR = "./recordings/"
+    RECORDING_DIR = "/home/pi/dashcam_v2/recordings/"
 
     def __init__(self):
         self.logger = logging.getLogger(self.__class__.__name__)
