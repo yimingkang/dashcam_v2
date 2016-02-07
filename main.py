@@ -1,4 +1,5 @@
 import datetime
+import time
 import logging
 import os
 
@@ -7,6 +8,7 @@ from recorder import Recorder
 class Dashcam:
     LOG_FILE = "/home/pi/dashcam_v2/dashcam.log"
     MINIMUM_FREE_SPACE = 500  # 500 MB
+    JAN_1ST_2016 = 1451624400
 
     def __init__(self):
         logging.basicConfig(
@@ -16,6 +18,11 @@ class Dashcam:
            datefmt='%y-%m-%d %H:%M:%S',
         )
         self.logger = logging.getLogger(self.__class__.__name__)
+        current_time = time.locatime()
+        if current_time < JAN_1ST_2016:
+            # we probably doesnt have RTC
+            self.logger.error("No RTC? Current time is " + str(datetime.datetime.now()))
+            raise ValueError("There doesn't seem to be a RTC")
         self.recorder = Recorder()
 
     def start(self):
