@@ -18,8 +18,8 @@ class Dashcam:
            datefmt='%y-%m-%d %H:%M:%S',
         )
         self.logger = logging.getLogger(self.__class__.__name__)
-        current_time = time.locatime()
-        if current_time < JAN_1ST_2016:
+        current_time = time.localtime()
+        if current_time < Dashcam.JAN_1ST_2016:
             # we probably doesnt have RTC
             self.logger.error("No RTC? Current time is " + str(datetime.datetime.now()))
             raise ValueError("There doesn't seem to be a RTC")
