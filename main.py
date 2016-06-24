@@ -20,9 +20,9 @@ class Dashcam:
         self.logger = logging.getLogger(self.__class__.__name__)
         current_time = time.localtime()
         if current_time < Dashcam.JAN_1ST_2016:
-            # we probably doesnt have RTC
+            # we probably doesnt have RTC, do not raise error for now
             self.logger.error("No RTC? Current time is " + str(datetime.datetime.now()))
-            raise ValueError("There doesn't seem to be a RTC")
+            # raise ValueError("There doesn't seem to be a RTC")
         self.recorder = Recorder()
 
     def start(self):
@@ -36,9 +36,9 @@ class Dashcam:
                 )
                 while self.get_free_MB() < Dashcam.MINIMUM_FREE_SPACE:
                     self.remove_oldest_file()
-            # record for 30 minutes (on low resolution)
+            # record for 10 minutes (on low resolution)
             timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
-            self.recorder.record(timestamp, duration=1800, low_resolution=True)
+            self.recorder.record(timestamp, duration=600, low_resolution=False)
     
     def remove_oldest_file(self, extension=".h264"):
         try:
